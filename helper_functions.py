@@ -30,6 +30,7 @@ def global_alignment(seq1, seq2, scoring_function):
     Other alignments are not possible.
 
     """
+    # Initialise lengths of sequences and matrices
     n, m = len(seq1), len(seq2)
     scores = [[0 for _ in range(m + 1)] for _ in range(n + 1)]
     arrows = [[None for _ in range(m + 1)] for _ in range(n + 1)]
@@ -44,11 +45,13 @@ def global_alignment(seq1, seq2, scoring_function):
 
     for i in range(1, n + 1):
         for j in range(1, m + 1):
+            # Fill in scores matrix with scores using Needleman-Wunsch algorithm
             match = scores[i - 1][j - 1] + scoring_function(seq1[i - 1], seq2[j - 1])
             up = scores[i - 1][j] + scoring_function(seq1[i - 1], "-")
             left = scores[i][j - 1] + scoring_function("-", seq2[j - 1])
-
             scores[i][j] = max(match, up, left)
+
+            # Fill in arrows matrix with directions using results from algorithm
             if scores[i][j] == match:
                 arrows[i][j] = "diagonal"
             elif scores[i][j] == up:
@@ -60,6 +63,7 @@ def global_alignment(seq1, seq2, scoring_function):
     aligned_seq2 = []
     i, j = n, m
 
+    # Find full path back to start of matrix to get aligned sequences
     while i > 0 or j > 0:
         if arrows[i][j] == "diagonal":
             aligned_seq1.append(seq1[i - 1])
@@ -75,6 +79,7 @@ def global_alignment(seq1, seq2, scoring_function):
             aligned_seq2.append(seq2[j - 1])
             j -= 1
 
+    # Reverse directions to get aligned sequences
     aligned_seq1.reverse()
     aligned_seq2.reverse()
 
