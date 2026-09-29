@@ -28,6 +28,26 @@ def global_alignment(seq1, seq2, scoring_function):
     Other alignments are not possible.
 
     """
+    n, m = len(seq1), len(seq2)
+
+    scores = [n][m]
+    for i in range(n + 1):
+        for j in range(m + 1):
+            scores[i][j] = 0.0
+
+    arrows = [n][m]
+    for i in range(n + 1):
+            for j in range(m + 1):
+                arrows[i][j] = None
+
+    for i in range(1, n + 1):
+        scores[i][0] = scores[i-1][0] + scoring_function(seq1[i - 1], "-")
+        arrows[i][0] = "up"
+
+    for j in range(1, m + 1):
+        scores[0][j] = scores[0][j-1] + scoring_function("-", seq2[j - 1])
+        arrows[0][j] = "left"
+
     raise NotImplementedError()
 
 
