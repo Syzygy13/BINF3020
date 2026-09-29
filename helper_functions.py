@@ -48,6 +48,20 @@ def global_alignment(seq1, seq2, scoring_function):
         scores[0][j] = scores[0][j-1] + scoring_function("-", seq2[j - 1])
         arrows[0][j] = "left"
 
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            match = scores[i - 1][j - 1] + scoring_function(seq1[i - 1], seq2[j - 1])
+            up = scores[i - 1][j] + scoring_function(seq1[i - 1], "-")
+            left = scores[i][j - 1] + scoring_function("-", seq2[j - 1])
+
+            scores[i][j] = max(match, up, left)
+            if scores[i][j] == match:
+                arrows[i][j] = "diagonal"
+            elif scores[i][j] == "up":
+                arrows[i][j] = "up"
+            else:
+                arrows[i][j] = "left"
+
     raise NotImplementedError()
 
 
