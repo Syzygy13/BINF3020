@@ -141,12 +141,17 @@ def local_alignment(seq1, seq2, scoring_function):
             else:
                 arrows[i][j] = None
 
+            # Keep track of highest score in matrix and location
+            if max_score < scores[i][j]:
+                max_score = scores[i][j]
+                max_i, max_j = i, j
+
     aligned_seq1 = []
     aligned_seq2 = []
-    i, j = n, m
+    i, j = max_i, max_j
 
     # Find full path back to start of matrix to get aligned sequences
-    while i > 0 or j > 0:
+    while i > 0 and j > 0 and scores[i][j] > 0:
         if arrows[i][j] == "diagonal":
             aligned_seq1.append(seq1[i - 1])
             aligned_seq2.append(seq2[j - 1])
@@ -168,8 +173,9 @@ def local_alignment(seq1, seq2, scoring_function):
     aligned_seq1_combined = "".join(aligned_seq1)
     aligned_seq2_combined = "".join(aligned_seq2)
 
-    return aligned_seq1_combined, aligned_seq2_combined, float(scores[n][m])
+    return aligned_seq1_combined, aligned_seq2_combined, float(max_score)
 
+print(local_alignment("pending itch", "unending glitch", lambda x, y: [-1, 1][x == y]))
 
 ## This is an example scoring function, you should implement a version which uses a scoring matrix 
 def scoring_function_simple(aa_i,aa_j):
