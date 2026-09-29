@@ -1,3 +1,5 @@
+from Bio.Align import substitution_matrices
+
 def global_alignment(seq1, seq2, scoring_function):
     """Global sequence alignment using the Needleman–Wunsch algorithm.
 
@@ -81,8 +83,6 @@ def global_alignment(seq1, seq2, scoring_function):
 
     return aligned_seq1_combined, aligned_seq2_combined, float(scores[n][m])
 
-print(global_alignment("abracadabra", "dabarakadara", lambda x, y: [-1, 1][x == y]))
-
 def local_alignment(seq1, seq2, scoring_function):
     """Local sequence alignment using the Smith-Waterman algorithm.
 
@@ -119,4 +119,16 @@ def local_alignment(seq1, seq2, scoring_function):
 ## This is an example scoring function, you should implement a version which uses a scoring matrix 
 def scoring_function_simple(aa_i,aa_j):
     score = [-1, 1][aa_i == aa_j]
+    return (score)
+
+# Scoring matrix function using BLOSUM62 and a gap penalty of -8
+def scoring_function(aa_i,aa_j):
+    blosum62 = substitution_matrices.load("BLOSUM62")
+    gap_penalty = -8
+
+    if aa_i == "-" or aa_j == "-":
+        score = gap_penalty
+    else:
+        score = blosum62[aa_i, aa_j]
+
     return (score)
