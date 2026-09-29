@@ -29,9 +29,9 @@ def global_alignment(seq1, seq2, scoring_function):
 
     """
     n, m = len(seq1), len(seq2)
-    scores = [[0 for _ in range(m)] for _ in range(n)]
-    arrows = [[None for _ in range(m)] for _ in range(n)]
-    
+    scores = [[0 for _ in range(m + 1)] for _ in range(n + 1)]
+    arrows = [[None for _ in range(m + 1)] for _ in range(n + 1)]
+  
     for i in range(1, n + 1):
         scores[i][0] = scores[i-1][0] + scoring_function(seq1[i - 1], "-")
         arrows[i][0] = "up"
@@ -81,6 +81,7 @@ def global_alignment(seq1, seq2, scoring_function):
 
     return aligned_seq1_combined, aligned_seq2_combined, float(scores[n][m])
 
+print(global_alignment("abracadabra", "dabarakadara", lambda x, y: [-1, 1][x == y]))
 
 def local_alignment(seq1, seq2, scoring_function):
     """Local sequence alignment using the Smith-Waterman algorithm.
