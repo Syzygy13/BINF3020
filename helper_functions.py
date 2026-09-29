@@ -175,8 +175,6 @@ def local_alignment(seq1, seq2, scoring_function):
 
     return aligned_seq1_combined, aligned_seq2_combined, float(max_score)
 
-print(local_alignment("pending itch", "unending glitch", lambda x, y: [-1, 1][x == y]))
-
 ## This is an example scoring function, you should implement a version which uses a scoring matrix 
 def scoring_function_simple(aa_i,aa_j):
     score = [-1, 1][aa_i == aa_j]
