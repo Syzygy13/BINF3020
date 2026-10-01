@@ -1,5 +1,8 @@
 from Bio.Align import substitution_matrices
 
+# Scoring matrix function using BLOSUM62 and a gap penalty of -8
+blosum62 = substitution_matrices.load("BLOSUM62")
+
 def global_alignment(seq1, seq2, scoring_function):
     """Global sequence alignment using the Needleman–Wunsch algorithm.
 
@@ -34,13 +37,13 @@ def global_alignment(seq1, seq2, scoring_function):
     n, m = len(seq1), len(seq2)
     scores = [[0 for _ in range(m + 1)] for _ in range(n + 1)]
     arrows = [[None for _ in range(m + 1)] for _ in range(n + 1)]
-  
+
     for i in range(1, n + 1):
-        scores[i][0] = scores[i-1][0] + scoring_function(seq1[i - 1], "-")
+        scores[i][0] = scores[i - 1][0] + scoring_function(seq1[i - 1], "-")
         arrows[i][0] = "up"
 
     for j in range(1, m + 1):
-        scores[0][j] = scores[0][j-1] + scoring_function("-", seq2[j - 1])
+        scores[0][j] = scores[0][j - 1] + scoring_function("-", seq2[j - 1])
         arrows[0][j] = "left"
 
     for i in range(1, n + 1):
@@ -180,9 +183,7 @@ def scoring_function_simple(aa_i,aa_j):
     score = [-1, 1][aa_i == aa_j]
     return (score)
 
-# Scoring matrix function using BLOSUM62 and a gap penalty of -8
 def scoring_function(aa_i,aa_j):
-    blosum62 = substitution_matrices.load("BLOSUM62")
     gap_penalty = -8
 
     if aa_i == "-" or aa_j == "-":
